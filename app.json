@@ -9,9 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.athanasso.photoswidget"
     },
     "android": {
+      "package": "com.athanasso.photoswidget",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -27,6 +29,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-secure-store",
       [
         "expo-splash-screen",
         {
@@ -38,11 +41,44 @@
             "backgroundColor": "#000000"
           }
         }
+      ],
+      [
+        "expo-background-fetch",
+        {
+          "startOnBoot": true
+        }
+      ],
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "PhotoWidget",
+              "label": "Photo Widget",
+              "minWidth": "180dp",
+              "minHeight": "180dp",
+              "description": "Display your Google Photos on your home screen",
+              "previewImage": "./assets/images/widget-preview.png",
+              "resizeMode": "horizontal|vertical",
+              "widgetFeatures": "reconfigurable",
+              "updatePeriodMillis": 1800000
+            }
+          ]
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "googleClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+      "googleAndroidClientId": "YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com",
+      "router": {},
+      "eas": {
+        "projectId": "a6e75283-230e-4589-8c36-5933f421e3d7"
+      }
+    },
+    "owner": "athanasso"
   }
 }

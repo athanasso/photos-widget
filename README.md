@@ -1,50 +1,134 @@
-# Welcome to your Expo app 👋
+# 📷 Photos Widget
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A beautiful Android home screen widget app that displays your photos from Google Photos or your local device.
 
-## Get started
+![Platform](https://img.shields.io/badge/Platform-Android-green)
+![React Native](https://img.shields.io/badge/React%20Native-Expo-blue)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
-1. Install dependencies
+## ✨ Features
 
-   ```bash
-   npm install
-   ```
+### 📱 Photo Sources
+- **Google Photos** - Select photos from your cloud library using the official Photos Picker API
+- **Local Photos** - Choose photos directly from your device storage
+- **Mix & Match** - Add photos from both sources to your widget
 
-2. Start the app
+### 🖼️ Widget Display Modes
+- **Single Mode** - Display one photo on your widget
+- **Slideshow Mode** - Automatically rotate through multiple photos
 
-   ```bash
-   npx expo start
-   ```
+### 🎛️ Photo Management
+- View all selected photos in the dedicated Photos tab
+- Delete individual photos or clear all
+- See which photo is currently displayed
+- Add more photos anytime
 
-In the output, you'll find options to open the app in a
+### ⚙️ Settings
+- **Auto-rotate** - Enable/disable automatic photo rotation (~30 min intervals)
+- **Background refresh status** - See if background tasks are available
+- **Clear all widget data** - Reset your widget
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 🔄 Widget Controls
+- **Next Photo button** - Manually rotate to the next photo in the app
+- **Widget updates** - Widget syncs with your selections
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📲 Installation
 
-## Get a fresh project
+### Prerequisites
+- Node.js 18+
+- Android Studio (for development builds)
+- An Android device or emulator
 
-When you're ready, run:
+### Setup
 
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone https://github.com/athanasso/photos-widget.git
+cd photos-widget
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn more
+3. Create a `.env` file with your Google OAuth credentials:
+```env
+GOOGLE_CLIENT_ID=your-web-client-id.apps.googleusercontent.com
+GOOGLE_ANDROID_CLIENT_ID=your-android-client-id.apps.googleusercontent.com
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Build and run:
+```bash
+npx expo run:android
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🔧 Google OAuth Setup
 
-## Join the community
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing
+3. Enable the **Photos Picker API**
+4. Create OAuth 2.0 credentials:
+   - **Web application** - For the auth session proxy
+   - **Android** - With your app's SHA1 fingerprint
+5. Add your credentials to the `.env` file
 
-Join our community of developers creating universal apps.
+### Getting SHA1 Fingerprint
+```bash
+cd android
+./gradlew signingReport
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 📁 Project Structure
+
+```
+photos-widget/
+├── app/                    # Expo Router screens
+│   ├── (tabs)/            # Tab screens
+│   │   ├── index.tsx      # Home screen
+│   │   ├── photos.tsx     # Photos management
+│   │   └── settings.tsx   # Settings
+│   └── photo-picker.tsx   # Google Photos picker
+├── components/            # Reusable components
+├── services/              # API and storage services
+│   ├── google-auth.ts     # OAuth authentication
+│   ├── photos-picker-api.ts # Google Photos Picker API
+│   └── widget-storage.ts  # Widget data management
+├── widgets/               # Android widget components
+│   └── photo-widget.tsx   # Widget rendering
+└── context/               # React contexts
+```
+
+## 🛠️ Tech Stack
+
+- **React Native** with **Expo** (SDK 53)
+- **Expo Router** for navigation
+- **react-native-android-widget** for Android widget support
+- **expo-auth-session** for OAuth
+- **expo-image-picker** for local photos
+- **expo-file-system** for local storage
+- **expo-background-fetch** for auto-rotation
+
+## 📖 How It Works
+
+1. **Authentication** - Sign in with Google to access your Photos library (optional for local photos)
+2. **Photo Selection** - Choose photos from Google Photos or your device
+3. **Photo Caching** - Selected photos are downloaded locally for offline access
+4. **Widget Display** - Photos are rendered as a native Android widget
+5. **Auto-rotation** - Background task rotates photos periodically
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👨‍💻 Developer
+
+Created by [@athanasso](https://github.com/athanasso)
+
+---
+
+⭐ If you find this project useful, please give it a star!
