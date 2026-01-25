@@ -423,7 +423,7 @@ export default function SettingsScreen() {
             <View style={styles.settingRow}>
               <View style={styles.settingInfo}>
                 <ThemedText style={styles.settingLabel}>Version</ThemedText>
-                <ThemedText style={styles.settingValue}>1.0.0</ThemedText>
+                <ThemedText style={styles.settingValue}>1.1.0</ThemedText>
               </View>
             </View>
 
