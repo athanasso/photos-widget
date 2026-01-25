@@ -17,6 +17,21 @@ A beautiful Android home screen widget app that displays your photos from Google
 - **Single Mode** - Display one photo on your widget
 - **Slideshow Mode** - Automatically rotate through multiple photos
 
+### 🔄 Photo Rotation Options
+
+| Method | Speed | Description |
+|--------|-------|-------------|
+| **Tap Widget** | Instant ⚡ | Tap the widget on your home screen to rotate |
+| **Next Photo Button** | Instant ⚡ | Use the button in the app |
+| **Reliable Rotation** | 5+ seconds | Foreground service with notification - **guaranteed timing!** |
+| **Background Rotation** | 15-30+ min | No notification, but may be delayed by Android |
+
+### ⚡ Reliable Rotation (NEW!)
+- Uses a foreground service with a small notification
+- Works at ANY interval - even 5 seconds!
+- Bypasses Android's battery restrictions
+- Perfect for digital photo frame use
+
 ### 🎛️ Photo Management
 - View all selected photos in the dedicated Photos tab
 - Delete individual photos or clear all
@@ -24,13 +39,10 @@ A beautiful Android home screen widget app that displays your photos from Google
 - Add more photos anytime
 
 ### ⚙️ Settings
-- **Auto-rotate** - Enable/disable automatic photo rotation (~30 min intervals)
-- **Background refresh status** - See if background tasks are available
+- **Reliable Rotation** - Enable foreground service for guaranteed timing
+- **Background Rotation** - Legacy mode using background fetch
+- **Custom Intervals** - Set any interval from 5 seconds to hours
 - **Clear all widget data** - Reset your widget
-
-### 🔄 Widget Controls
-- **Next Photo button** - Manually rotate to the next photo in the app
-- **Widget updates** - Widget syncs with your selections
 
 ## 📲 Installation
 
@@ -60,6 +72,7 @@ GOOGLE_ANDROID_CLIENT_ID=your-android-client-id.apps.googleusercontent.com
 
 4. Build and run:
 ```bash
+npx expo prebuild
 npx expo run:android
 ```
 
@@ -93,10 +106,14 @@ photos-widget/
 ├── services/              # API and storage services
 │   ├── google-auth.ts     # OAuth authentication
 │   ├── photos-picker-api.ts # Google Photos Picker API
-│   └── widget-storage.ts  # Widget data management
+│   ├── widget-storage.ts  # Widget data management
+│   ├── foreground-rotation.ts # Reliable rotation service
+│   └── background-fetch.ts # Background rotation
 ├── widgets/               # Android widget components
 │   └── photo-widget.tsx   # Widget rendering
-└── context/               # React contexts
+└── android/              # Native Android code
+    └── app/src/main/java/.../service/
+        └── WidgetRotationService.kt # Foreground service
 ```
 
 ## 🛠️ Tech Stack
@@ -107,7 +124,7 @@ photos-widget/
 - **expo-auth-session** for OAuth
 - **expo-image-picker** for local photos
 - **expo-file-system** for local storage
-- **expo-background-fetch** for auto-rotation
+- **Native Foreground Service** for reliable rotation
 
 ## 📖 How It Works
 
@@ -115,7 +132,10 @@ photos-widget/
 2. **Photo Selection** - Choose photos from Google Photos or your device
 3. **Photo Caching** - Selected photos are downloaded locally for offline access
 4. **Widget Display** - Photos are rendered as a native Android widget
-5. **Auto-rotation** - Background task rotates photos periodically
+5. **Rotation Options**:
+   - **Tap to rotate** - Tap the widget to see the next photo
+   - **Reliable Rotation** - Foreground service guarantees precise timing
+   - **Background Rotation** - System-managed, may be delayed
 
 ## 🤝 Contributing
 

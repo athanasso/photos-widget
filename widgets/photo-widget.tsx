@@ -74,11 +74,11 @@ async function rotatePhoto(): Promise<void> {
 /**
  * Convert image to base64 for widget display
  */
-async function getImageAsBase64(imagePath: string): Promise<string | null> {
+async function getImageAsBase64(imagePath: string): Promise<`data:image${string}` | null> {
   try {
     // If it's already a data URI, return it
-    if (imagePath.startsWith("data:")) {
-      return imagePath;
+    if (imagePath.startsWith("data:image")) {
+      return imagePath as `data:image${string}`;
     }
 
     // Read the file as base64
@@ -142,11 +142,7 @@ async function renderPhotoWidget(
   const base64Image = await getImageAsBase64(imagePath);
 
   if (base64Image) {
-    // Use custom click action if slideshow mode to rotate photos
-    const clickAction = widgetData.displayMode === "slideshow" && widgetData.photos.length > 1
-      ? "NEXT_PHOTO"
-      : "OPEN_APP";
-
+    // Always use ROTATE_PHOTO action to enable tap-to-rotate
     renderWidget(
       <FlexWidget
         style={{
@@ -156,8 +152,8 @@ async function renderPhotoWidget(
           borderRadius: 16,
           overflow: "hidden",
         }}
-        clickAction={clickAction}
-        clickActionData={{ action: "next" }}
+        clickAction="ROTATE_PHOTO"
+        clickActionData={{ action: "rotate" }}
       >
         <ImageWidget
           image={base64Image}
@@ -207,26 +203,45 @@ async function renderPhotoWidget(
  * Widget task handler for react-native-android-widget
  */
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps): Promise<void> {
-  const { widgetAction, widgetInfo, renderWidget } = props;
+  const { widgetAction, widgetInfo, renderWidget, clickAction, clickActionData } = props;
+  
+  console.log("[PhotoWidget] Task handler called:", {
+    widgetAction,
+    clickAction,
+    clickActionData,
+    widgetId: widgetInfo.widgetId,
+  });
 
   switch (widgetAction) {
     case "WIDGET_ADDED":
     case "WIDGET_UPDATE":
     case "WIDGET_RESIZED":
+      console.log("[PhotoWidget] Rendering widget for:", widgetAction);
       await renderPhotoWidget(widgetInfo, renderWidget);
       break;
 
     case "WIDGET_CLICK":
-      // Rotate to next photo when widget is clicked in slideshow mode
-      await rotatePhoto();
-      await renderPhotoWidget(widgetInfo, renderWidget);
+      // Handle click action - rotate to next photo
+      console.log("[PhotoWidget] Widget clicked! clickAction:", clickAction);
+      if (clickAction === "ROTATE_PHOTO") {
+        console.log("[PhotoWidget] Rotating to next photo...");
+        await rotatePhoto();
+        await renderPhotoWidget(widgetInfo, renderWidget);
+        console.log("[PhotoWidget] Photo rotated and widget updated");
+      } else {
+        // Unknown click action, still try to rotate
+        console.log("[PhotoWidget] Unknown clickAction, rotating anyway");
+        await rotatePhoto();
+        await renderPhotoWidget(widgetInfo, renderWidget);
+      }
       break;
 
     case "WIDGET_DELETED":
-      // Widget was removed, nothing to do
+      console.log("[PhotoWidget] Widget deleted");
       break;
 
     default:
+      console.log("[PhotoWidget] Unknown widget action:", widgetAction);
       break;
   }
 }
@@ -277,6 +292,7 @@ export async function renderWidgetForUpdate(widgetInfo: { width: number; height:
   const base64Image = await getImageAsBase64(imagePath);
 
   if (base64Image) {
+    // Use ROTATE_PHOTO action to enable tap-to-rotate on home screen
     return (
       <FlexWidget
         style={{
@@ -286,7 +302,8 @@ export async function renderWidgetForUpdate(widgetInfo: { width: number; height:
           borderRadius: 16,
           overflow: "hidden",
         }}
-        clickAction="OPEN_APP"
+        clickAction="ROTATE_PHOTO"
+        clickActionData={{ action: "rotate" }}
       >
         <ImageWidget
           image={base64Image}

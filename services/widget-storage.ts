@@ -31,6 +31,7 @@ export interface WidgetData {
   displayMode: DisplayMode;
   lastUpdated: number;
   albumId?: string;
+  rotationIntervalSeconds?: number; // User-configurable interval
 }
 
 // Native module for SharedPreferences (will be available after prebuild)
@@ -84,15 +85,19 @@ export async function saveWidgetPhotos(
   photos: WidgetPhoto[],
   displayMode: DisplayMode = "single",
   albumId?: string,
+  rotationIntervalSeconds?: number,
 ): Promise<void> {
   if (Platform.OS !== "android") return;
 
+  const existingData = await getWidgetData();
+
   const widgetData: WidgetData = {
     photos,
-    currentIndex: 0,
+    currentIndex: existingData?.currentIndex || 0,
     displayMode,
     lastUpdated: Date.now(),
     albumId,
+    rotationIntervalSeconds: rotationIntervalSeconds ?? existingData?.rotationIntervalSeconds ?? 1800, // Default 30 min
   };
 
   await saveWidgetData(widgetData);
@@ -183,16 +188,30 @@ export async function clearWidgetData(): Promise<void> {
   }
 }
 /**
+ * Update rotation interval
+ */
+export async function updateRotationInterval(seconds: number): Promise<void> {
+  if (Platform.OS !== "android") return;
+
+  const widgetData = await getWidgetData();
+  if (!widgetData) return;
+
+  widgetData.rotationIntervalSeconds = seconds;
+  await saveWidgetData(widgetData);
+  console.log(`Rotation interval updated to ${seconds} seconds`);
+}
+
+/**
  * Request widget update (Android only)
  * Uses the renderWidget callback API as required by the library
  */
 export async function requestWidgetUpdate(): Promise<void> {
   if (Platform.OS !== "android") return;
-  
+
   try {
     const { requestWidgetUpdate: updateWidget } = require("react-native-android-widget");
     const { renderWidgetForUpdate } = require("@/widgets/photo-widget");
-    
+
     await updateWidget({
       widgetName: "PhotoWidget",
       renderWidget: renderWidgetForUpdate,

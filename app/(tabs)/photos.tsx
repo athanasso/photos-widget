@@ -10,6 +10,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import {
     getWidgetData,
     requestWidgetUpdate,
+    rotateToNextPhoto,
     saveWidgetPhotos,
     type WidgetData,
     type WidgetPhoto,
@@ -167,6 +168,17 @@ export default function PhotosScreen() {
     );
   };
 
+  const handleNextPhoto = async () => {
+    try {
+      await rotateToNextPhoto();
+      await requestWidgetUpdate();
+      await loadWidgetData();
+    } catch (error) {
+      console.error("Error rotating photo:", error);
+      Alert.alert("Error", "Failed to switch to next photo");
+    }
+  };
+
   const photos = widgetData?.photos || [];
 
   return (
@@ -195,6 +207,16 @@ export default function PhotosScreen() {
             <ThemedText style={styles.addButtonText}>🖼️ Local</ThemedText>
           </Pressable>
         </View>
+
+        {/* Next Photo Button */}
+        {photos.length > 1 && (
+          <Pressable
+            style={[styles.nextPhotoButton, { backgroundColor: colors.tint }]}
+            onPress={handleNextPhoto}
+          >
+            <ThemedText style={styles.nextPhotoButtonText}>⏭️ Next Photo</ThemedText>
+          </Pressable>
+        )}
 
         {/* Photos Grid */}
         {photos.length === 0 ? (
@@ -283,6 +305,17 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "600",
     fontSize: 14,
+  },
+  nextPhotoButton: {
+    padding: 14,
+    borderRadius: 10,
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  nextPhotoButtonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
   },
   photosContainer: {
     flex: 1,

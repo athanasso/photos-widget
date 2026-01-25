@@ -159,6 +159,9 @@ export default function HomeScreen() {
           {!isAuthenticated ? (
             /* Sign In Section - For Google Photos */
             <View style={styles.signInSection}>
+              {/* Widget Preview - show even when not logged in */}
+              <WidgetPreview />
+              
               <ThemedText style={styles.signInPrompt}>
                 Sign in with Google to access your Google Photos, or select photos from your device below
               </ThemedText>
@@ -179,6 +182,24 @@ export default function HomeScreen() {
                 </ThemedText>
                 <ThemedText style={styles.actionButtonSubtext}>
                   Choose photos from your device
+                </ThemedText>
+              </Pressable>
+              
+              {/* Widget Instructions */}
+              <Pressable
+                style={[
+                  styles.actionButtonOutline,
+                  { borderColor: colors.tint },
+                ]}
+                onPress={showWidgetInstructions}
+              >
+                <ThemedText
+                  style={[
+                    styles.actionButtonOutlineText,
+                    { color: colors.tint },
+                  ]}
+                >
+                  ℹ️ How to Add Widget
                 </ThemedText>
               </Pressable>
             </View>

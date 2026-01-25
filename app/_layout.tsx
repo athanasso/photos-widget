@@ -5,11 +5,13 @@ import {
 } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Platform } from "react-native";
+import { useEffect } from "react";
+import { AppState, Platform } from "react-native";
 import "react-native-reanimated";
 
 import { AuthProvider } from "@/context/auth-context";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { requestWidgetUpdate } from "@/services/widget-storage";
 
 // Register widget task handler for Android
 if (Platform.OS === "android") {
@@ -22,6 +24,23 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+
+  useEffect(() => {
+    // Trigger widget update when app opens or comes to foreground
+    if (Platform.OS === "android") {
+      requestWidgetUpdate();
+
+      const subscription = AppState.addEventListener("change", (nextAppState) => {
+        if (nextAppState === "active") {
+          requestWidgetUpdate();
+        }
+      });
+
+      return () => {
+        subscription.remove();
+      };
+    }
+  }, []);
 
   return (
     <AuthProvider>
