@@ -73,7 +73,6 @@
     },
     "extra": {
       "googleClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
-      "googleAndroidClientId": "YOUR_ANDROID_CLIENT_ID.apps.googleusercontent.com",
       "router": {},
       "eas": {
         "projectId": "a6e75283-230e-4589-8c36-5933f421e3d7"

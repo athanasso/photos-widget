@@ -73,8 +73,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     reactCompiler: true,
   },
   extra: {
-    googleClientId: process.env.GOOGLE_CLIENT_ID,
-    googleAndroidClientId: process.env.GOOGLE_ANDROID_CLIENT_ID,
+googleClientId: process.env.GOOGLE_CLIENT_ID,
     router: {},
     eas: {
       projectId: "a6e75283-230e-4589-8c36-5933f421e3d7",

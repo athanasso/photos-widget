@@ -8,14 +8,14 @@ import Constants from "expo-constants";
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import {
-  clearAuthData,
-  getRefreshToken,
-  getTokens,
-  isTokenExpired,
-  saveTokens,
-  saveUserInfo,
-  type TokenData,
-  type UserInfo,
+    clearAuthData,
+    getRefreshToken,
+    getTokens,
+    isTokenExpired,
+    saveTokens,
+    saveUserInfo,
+    type TokenData,
+    type UserInfo,
 } from "./secure-storage";
 
 // Complete auth session for web browser
@@ -44,7 +44,6 @@ const getClientIds = () => {
   const extra = Constants.expoConfig?.extra;
   return {
     webClientId: extra?.googleClientId || "",
-    androidClientId: extra?.googleAndroidClientId || "",
   };
 };
 

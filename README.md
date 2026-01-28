@@ -67,7 +67,6 @@ npm install
 3. Create a `.env` file with your Google OAuth credentials:
 ```env
 GOOGLE_CLIENT_ID=your-web-client-id.apps.googleusercontent.com
-GOOGLE_ANDROID_CLIENT_ID=your-android-client-id.apps.googleusercontent.com
 ```
 
 4. Build and run:
@@ -83,14 +82,8 @@ npx expo run:android
 3. Enable the **Photos Picker API**
 4. Create OAuth 2.0 credentials:
    - **Web application** - For the auth session proxy
-   - **Android** - With your app's SHA1 fingerprint
 5. Add your credentials to the `.env` file
 
-### Getting SHA1 Fingerprint
-```bash
-cd android
-./gradlew signingReport
-```
 
 ## 📁 Project Structure
 
