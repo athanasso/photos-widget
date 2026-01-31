@@ -108,7 +108,8 @@ export async function unregisterBackgroundFetch(): Promise<void> {
  * Check background fetch status
  */
 export async function getBackgroundFetchStatus(): Promise<BackgroundFetch.BackgroundFetchStatus> {
-  return await BackgroundFetch.getStatusAsync();
+  const status = await BackgroundFetch.getStatusAsync();
+  return status ?? BackgroundFetch.BackgroundFetchStatus.Denied;
 }
 
 /**

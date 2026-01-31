@@ -111,7 +111,7 @@ photos-widget/
 
 ## 🛠️ Tech Stack
 
-- **React Native** with **Expo** (SDK 53)
+- **React Native** with **Expo** (SDK 54)
 - **Expo Router** for navigation
 - **react-native-android-widget** for Android widget support
 - **expo-auth-session** for OAuth
